@@ -1,0 +1,111 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="static/css/style.css">
+  <title>Predict Rent!</title>
+
+
+</head>
+
+<body>
+  <div class="container">
+      <h1 class="model-title">Rent Prediction Model - Mumbai</h1>
+    <form method = "post">
+      <div class="form-ele">
+
+       <label for="locality">Locality</label>
+        <select id="locality" name="locality" required="1">
+            {% for locality in locality %}
+          <option value="{{locality}}">{{locality}}</option>
+            {% endfor %}
+        </select>
+
+        <label for="bhk">BHK Type</label>
+        <select id="bhk" name="bhk" required="1">>
+          {% for bhk in bhk %}
+          <option value="{{bhk}}">{{bhk}}</option>
+            {% endfor %}
+        </select>
+
+      </div>
+    <div class="form-ele">
+
+       <label for="furnishing">Furnishing</label>
+        <select id="furnishing" name="furnishing" required="1">>
+          {% for furnishing in furnishing %}
+          <option value="{{furnishing}}">{{furnishing}}</option>
+            {% endfor %}
+        </select>
+
+        <label for="bathrooms">Bathrooms</label>
+        <select id="bathrooms" name="bathrooms" required="1">>
+          {% for bathrooms in bathrooms %}
+          <option value="{{bathrooms}}">{{bathrooms}}</option>
+            {% endfor %}
+        </select>
+
+      </div>
+
+        <div class="form-ele">
+
+       <label for="balcony">Balconies</label>
+        <select id="balcony" name="balcony" required="1">>
+          {% for balcony in balcony %}
+          <option value="{{balcony}}">{{balcony}}</option>
+            {% endfor %}
+        </select>
+
+        <label for="parking">Parking</label>
+        <select id="parking" name="parking" required="1">>
+          {% for parking in parking %}
+          <option value="{{parking}}">{{parking}}</option>
+            {% endfor %}
+        </select>
+
+      </div>
+
+        <div class="form-ele">
+
+       <label for="buildup">Build Up Area</label>
+        <input type="text" onkeypress='return event.charCode >= 48 && event.charCode <= 57' id="buildup" name="buildup" placeholder="Build Up Area (in sq.ft)" required="1">
+
+        <label for="carpet">Carpet Area</label>
+        <input type="text" onkeypress='return event.charCode >= 48 && event.charCode <= 57' id="carpet" name="carpet" placeholder="Carpet Area (in sq.ft)" required="1">
+
+      </div>
+
+    <br/>
+    <input type="submit" value="Predict Rent" onclick="sendData()">
+  </form>
+      <h2 class="model-title" id="prediction"></h2>
+  </div>
+
+
+<script>
+    function formHandler(event){
+        event.preventDefault();
+    }
+    function sendData(){
+        document.querySelector('form').addEventListener('submit',formHandler);
+
+        const fd = new FormData(document.querySelector('form'));
+        const req = new XMLHttpRequest();
+        req.open('POST', '/predict', true);
+        document.getElementById("prediction").innerHTML="Hold Tight!...";
+
+        req.onreadystatechange= function(){
+            if(req.readyState == XMLHttpRequest.DONE)
+            {
+                document.getElementById("prediction").innerHTML = "Rs. " + req.responseText;
+            }
+        }
+        req.onload=function(){};
+        req.send(fd);
+    }
+</script>
+
+</body>
+</html>
